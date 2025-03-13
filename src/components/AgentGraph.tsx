@@ -28,18 +28,22 @@ const initialNodes: Node[] = [
     data: { 
       label: 'Base Business Agent',
       description: 'Base agent class for business automation tasks',
-      tools: ['process_task', 'register_tools', 'generate_response']
+      tools: ['process_task', 'register_tools', 'generate_response'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['operations', 'marketing', 'supply_chain', 'customer_relations']
     }
   },
-  // HIPAA Compliant Agent
+  // Business Swarm Coordinator
   {
-    id: 'hipaa',
+    id: 'coordinator',
     type: 'agent',
     position: { x: 400, y: 200 },
     data: { 
-      label: 'HIPAA Compliant Agent',
-      description: 'Base class for HIPAA-compliant business agents',
-      tools: ['log_access', 'verify_authorization', 'process_hipaa_compliant']
+      label: 'Business Swarm Coordinator',
+      description: 'Coordinates business automation agents with AG2 CaptainAgent',
+      tools: ['delegate_task', 'monitor_performance', 'manage_channels', 'track_metrics'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['operations', 'marketing', 'supply_chain', 'customer_relations']
     }
   },
   // Business Agents
@@ -50,7 +54,9 @@ const initialNodes: Node[] = [
     data: { 
       label: 'Restaurant Operations',
       description: 'Manages restaurant operations in Calhoun, GA',
-      tools: ['manage_menu', 'manage_kitchen', 'monitor_quality', 'manage_seating', 'manage_bar']
+      tools: ['manage_menu', 'manage_kitchen', 'monitor_quality', 'manage_seating', 'manage_bar'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['operations', 'supply_chain']
     }
   },
   {
@@ -60,7 +66,9 @@ const initialNodes: Node[] = [
     data: { 
       label: 'Retail Operations',
       description: 'Manages retail operations in Calhoun, GA',
-      tools: ['manage_inventory', 'process_order', 'track_loyalty', 'generate_analytics']
+      tools: ['manage_inventory', 'process_order', 'track_loyalty', 'generate_analytics'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['operations', 'supply_chain']
     }
   },
   {
@@ -70,7 +78,9 @@ const initialNodes: Node[] = [
     data: { 
       label: 'Local Marketing',
       description: 'Manages local marketing and community engagement',
-      tools: ['manage_social_media', 'create_promotion', 'track_events', 'manage_reviews']
+      tools: ['manage_social_media', 'create_promotion', 'track_events', 'manage_reviews'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['marketing', 'customer_relations']
     }
   },
   {
@@ -80,7 +90,9 @@ const initialNodes: Node[] = [
     data: { 
       label: 'Local Supplier Integration',
       description: 'Manages supplier relationships and community events',
-      tools: ['manage_suppliers', 'track_ingredients', 'monitor_events', 'manage_programs']
+      tools: ['manage_suppliers', 'track_ingredients', 'monitor_events', 'manage_programs'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['supply_chain', 'operations']
     }
   },
   {
@@ -90,7 +102,9 @@ const initialNodes: Node[] = [
     data: { 
       label: 'Customer Service',
       description: 'Handles customer service tasks',
-      tools: ['format_response', 'categorize_inquiry']
+      tools: ['format_response', 'categorize_inquiry', 'manage_feedback'],
+      memorySystems: ['long_term', 'working', 'episodic'],
+      channels: ['customer_relations', 'marketing']
     }
   }
 ];
@@ -98,17 +112,19 @@ const initialNodes: Node[] = [
 // Define connections between agents
 const initialEdges: Edge[] = [
   // Inheritance edges
-  { id: 'base-hipaa', source: 'base', target: 'hipaa', animated: true },
-  { id: 'hipaa-restaurant', source: 'hipaa', target: 'restaurant', animated: true },
-  { id: 'hipaa-retail', source: 'hipaa', target: 'retail', animated: true },
-  { id: 'hipaa-marketing', source: 'hipaa', target: 'marketing', animated: true },
+  { id: 'base-coordinator', source: 'base', target: 'coordinator', animated: true },
+  { id: 'coordinator-restaurant', source: 'coordinator', target: 'restaurant', animated: true },
+  { id: 'coordinator-retail', source: 'coordinator', target: 'retail', animated: true },
+  { id: 'coordinator-marketing', source: 'coordinator', target: 'marketing', animated: true },
   
-  // Communication edges
-  { id: 'restaurant-supplier', source: 'restaurant', target: 'supplier' },
-  { id: 'retail-supplier', source: 'retail', target: 'supplier' },
-  { id: 'marketing-customer', source: 'marketing', target: 'customer' },
-  { id: 'restaurant-customer', source: 'restaurant', target: 'customer' },
-  { id: 'retail-customer', source: 'retail', target: 'customer' },
+  // Communication channel edges
+  { id: 'restaurant-supplier', source: 'restaurant', target: 'supplier', label: 'supply_chain' },
+  { id: 'retail-supplier', source: 'retail', target: 'supplier', label: 'supply_chain' },
+  { id: 'marketing-customer', source: 'marketing', target: 'customer', label: 'customer_relations' },
+  { id: 'restaurant-customer', source: 'restaurant', target: 'customer', label: 'customer_relations' },
+  { id: 'retail-customer', source: 'retail', target: 'customer', label: 'customer_relations' },
+  { id: 'marketing-retail', source: 'marketing', target: 'retail', label: 'marketing' },
+  { id: 'marketing-restaurant', source: 'marketing', target: 'restaurant', label: 'marketing' },
 ];
 
 export default function AgentGraph() {
