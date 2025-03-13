@@ -112,19 +112,19 @@ const initialNodes: Node[] = [
 // Define connections between agents
 const initialEdges: Edge[] = [
   // Inheritance edges
-  { id: 'base-coordinator', source: 'base', target: 'coordinator', animated: true },
-  { id: 'coordinator-restaurant', source: 'coordinator', target: 'restaurant', animated: true },
-  { id: 'coordinator-retail', source: 'coordinator', target: 'retail', animated: true },
-  { id: 'coordinator-marketing', source: 'coordinator', target: 'marketing', animated: true },
+  { id: 'base-coordinator', source: 'base', target: 'coordinator', animated: true, style: { stroke: '#60a5fa' } },
+  { id: 'coordinator-restaurant', source: 'coordinator', target: 'restaurant', animated: true, style: { stroke: '#60a5fa' } },
+  { id: 'coordinator-retail', source: 'coordinator', target: 'retail', animated: true, style: { stroke: '#60a5fa' } },
+  { id: 'coordinator-marketing', source: 'coordinator', target: 'marketing', animated: true, style: { stroke: '#60a5fa' } },
   
   // Communication channel edges
-  { id: 'restaurant-supplier', source: 'restaurant', target: 'supplier', label: 'supply_chain' },
-  { id: 'retail-supplier', source: 'retail', target: 'supplier', label: 'supply_chain' },
-  { id: 'marketing-customer', source: 'marketing', target: 'customer', label: 'customer_relations' },
-  { id: 'restaurant-customer', source: 'restaurant', target: 'customer', label: 'customer_relations' },
-  { id: 'retail-customer', source: 'retail', target: 'customer', label: 'customer_relations' },
-  { id: 'marketing-retail', source: 'marketing', target: 'retail', label: 'marketing' },
-  { id: 'marketing-restaurant', source: 'marketing', target: 'restaurant', label: 'marketing' },
+  { id: 'restaurant-supplier', source: 'restaurant', target: 'supplier', label: 'supply_chain', style: { stroke: '#34d399' } },
+  { id: 'retail-supplier', source: 'retail', target: 'supplier', label: 'supply_chain', style: { stroke: '#34d399' } },
+  { id: 'marketing-customer', source: 'marketing', target: 'customer', label: 'customer_relations', style: { stroke: '#f472b6' } },
+  { id: 'restaurant-customer', source: 'restaurant', target: 'customer', label: 'customer_relations', style: { stroke: '#f472b6' } },
+  { id: 'retail-customer', source: 'retail', target: 'customer', label: 'customer_relations', style: { stroke: '#f472b6' } },
+  { id: 'marketing-retail', source: 'marketing', target: 'retail', label: 'marketing', style: { stroke: '#fbbf24' } },
+  { id: 'marketing-restaurant', source: 'marketing', target: 'restaurant', label: 'marketing', style: { stroke: '#fbbf24' } },
 ];
 
 export default function AgentGraph() {
@@ -144,10 +144,11 @@ export default function AgentGraph() {
       onConnect={onConnect}
       nodeTypes={nodeTypes}
       fitView
+      className="bg-gray-900"
     >
-      <Background />
-      <Controls />
-      <MiniMap />
+      <Background color="#374151" gap={16} />
+      <Controls className="!bg-gray-800 !text-gray-200" />
+      <MiniMap className="!bg-gray-800" nodeColor="#1f2937" />
     </ReactFlow>
   );
 } 
