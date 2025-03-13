@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Calhoun Business Agent Network Visualizer
 
 An interactive visualization of the business automation agent network for Calhoun, GA businesses. This project provides a visual representation of:
@@ -70,3 +71,6 @@ agent-visualizer/
 ## License
 
 MIT
+=======
+# agent-explainer
+>>>>>>> 6ecde929039ee60cfea5a6c4d67222250a4058a5
