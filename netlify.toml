@@ -1,0 +1,1 @@
+[build]`ncommand = "cd agent-visualizer && npm install && npm run build"`npublish = "agent-visualizer/.next"`n`n[build.environment]`nNODE_VERSION = "18"`nNPM_VERSION = "10.2.4"`n`n[[plugins]]`npackage = "@netlify/plugin-nextjs"
