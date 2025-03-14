@@ -1,4 +1,4 @@
-ag2==0.2.0  # Autonomous Group 2 framework
+ag2==0.8.2rc0  # Autonomous Group 2 framework
 openai==1.3.0  # For LLM capabilities
 python-dotenv==1.0.0  # For environment variable management
 aiohttp==3.9.1  # For async HTTP requests
