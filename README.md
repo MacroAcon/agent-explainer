@@ -129,7 +129,58 @@ Our agent system implements a multi-layered privacy approach:
   - Font optimization
 
 ## Getting Started
-[Installation and setup instructions to be added]
+
+### Prerequisites
+- Python 3.8.12
+- Node.js 18 or higher
+- npm (latest version)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone [your-repo-url]
+cd [your-repo-name]
+```
+
+2. Set up Python environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+3. Install Node.js dependencies:
+```bash
+npm install
+```
+
+4. Create a `.env` file in the root directory and add your environment variables:
+```env
+OPENAI_API_KEY=your_api_key_here
+# Add other required environment variables
+```
+
+### Key Dependencies
+- ag2 (v0.5.3) - Autonomous Group 2 framework for agent coordination
+- OpenAI (v1.3.0) - For LLM capabilities
+- FastAPI (v0.105.0) - For API endpoints
+- Next.js 14 - Frontend framework
+- Material-UI - UI components
+
+### Development
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`
+
+### Production Build
+```bash
+npm run build
+npm start
+```
 
 ## Security Best Practices
 - Regular security audits
