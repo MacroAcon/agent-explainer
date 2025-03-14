@@ -1,11 +1,13 @@
 [build]
   base = "/"
-  command = "npm run build"
+  command = "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && source $HOME/.cargo/env && npm run build"
   publish = ".next"
 
 [build.environment]
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
   NODE_VERSION = "18"
+  RUSTUP_HOME = "/opt/buildhome/.rustup"
+  CARGO_HOME = "/opt/buildhome/.cargo"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs" 
