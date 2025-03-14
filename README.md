@@ -1,102 +1,126 @@
 # A&A Calhoun Automation Consultancy - AI Agent System Examples
 
 ## Overview
-This project demonstrates advanced AI agent systems designed for retail and healthcare automation, with a strong emphasis on privacy, security, and compliance. The examples showcase how intelligent agents can collaborate while maintaining strict data protection standards.
+This project shows how advanced AI systems can help in retail and healthcare by focusing on privacy, security, and following rules. Our examples demonstrate how smart agents can work together while keeping your data safe.
 
-## Privacy-First Architecture
+## Privacy and Security: Our Top Priority
 
-Our agent system implements a multi-layered privacy approach:
+Our system is designed to keep your data safe and private. Here's how we do it:
 
-### 1. Structural Privacy Controls
-- **Base Agents**: Act as gatekeepers, implementing fundamental security protocols and access controls
-- **Coordinator Agents**: Manage workflow distribution while enforcing privacy policies
-- **Swarm Coordinators**: Deploy temporary agents for specific privacy-sensitive tasks
-- **Privacy Agents**: Dedicated agents that monitor and enforce privacy compliance
-- **Location Nodes**: Maintain data locality and geographic privacy boundaries
+### Multi-Layered Privacy Controls
+- **Base Agents**: These are like security guards, making sure only the right people have access and following important security rules.
+- **Coordinator Agents**: They organize tasks and make sure privacy rules are followed, so everything runs smoothly and securely.
+- **Swarm Coordinators**: These send out temporary agents for tasks that need extra privacy, ensuring sensitive data is handled carefully.
+- **Privacy Agents**: They watch over everything to make sure privacy rules are always followed.
+- **Location Nodes**: These keep data within certain areas, following local privacy laws.
 
-### 2. Communication Security
-- **Isolated Channels**: Agents communicate through dedicated, purpose-specific channels
-- **Group Chat Security**: Restricted to authorized agents with appropriate clearance
-- **Encrypted Communications**: All inter-agent communications are encrypted
-- **Audit Trails**: Comprehensive logging of all agent interactions
+### Secure Communication
+- **Isolated Channels**: Agents talk through secure channels, so data is only shared with those who need it.
+- **Group Chat Security**: Only authorized agents can join, keeping conversations private.
+- **Encrypted Communications**: All data shared between agents is encrypted, protecting it from unauthorized access.
+- **Audit Trails**: Every action is recorded, providing a complete history for security checks.
 
-### 3. Healthcare-Specific Privacy (HIPAA Compliance)
-- **Data Privacy Agents**: Monitor PHI access and enforce HIPAA compliance
-- **Audit Agents**: Conduct regular compliance checks
-- **Breach Detection**: Real-time monitoring for potential privacy violations
-- **Access Control**: Granular permissions for patient data access
+### Healthcare-Specific Privacy (HIPAA Compliance)
+- **Data Privacy Agents**: They monitor access to personal health information and ensure compliance with healthcare privacy laws.
+- **Audit Agents**: Regular checks are done to ensure everything is compliant.
+- **Breach Detection**: Our system watches for any privacy issues in real-time.
+- **Access Control**: We make sure only authorized people can access sensitive data.
 
-### 4. Retail Privacy Features
-- **Customer Data Protection**: Dedicated privacy agents for loyalty programs
-- **Payment Security**: Specialized agents for payment data handling
-- **Marketing Compliance**: Privacy-aware promotional data management
-- **Supply Chain Privacy**: Secure handling of vendor and inventory data
+### Retail Privacy Features
+- **Customer Data Protection**: Privacy agents ensure customer data is handled securely, especially in loyalty programs.
+- **Payment Security**: Specialized agents manage payment data, keeping transactions secure.
+- **Marketing Compliance**: We handle promotional data with privacy in mind, ensuring compliance with regulations.
+- **Supply Chain Privacy**: Vendor and inventory data are handled securely, protecting business interests.
 
 ## Example Applications
 
 ### Retail Operations
-- Business process automation
-- Inventory management
-- Customer service coordination
-- Marketing automation
-- Supply chain optimization
-- Local store operations
+- Automating business processes
+- Managing inventory
+- Coordinating customer service
+- Automating marketing
+- Optimizing supply chains
+- Managing local store operations
 
 ### Healthcare Services
-- Patient care coordination
-- Pharmacy operations
-- Laboratory services
-- Insurance processing
-- Telemedicine services
-- Emergency response
-- Compliance management
+- Coordinating patient care
+- Managing pharmacy operations
+- Supporting laboratory services
+- Processing insurance claims
+- Enabling telemedicine
+- Responding to emergencies
+- Managing compliance
+
+## Interactive Visualization Features
+
+### Agent Network Graph
+- **Interactive Nodes**: Click to expand/collapse nodes to view detailed information
+- **Tool Visualization**: 
+  - Common tools displayed as circular icons for quick reference
+  - Specific tools shown as chips with hover tooltips
+  - Automatic tool categorization based on usage patterns
+- **Channel Display**: 
+  - Secure communication channels between agents
+  - Visual indicators for different channel types
+  - Hover tooltips for channel details
+- **Layout Features**:
+  - Horizontal flow for better readability
+  - Automatic spacing optimization
+  - Responsive design for different screen sizes
+  - Mini-map for navigation
+  - Collapsible legend for agent types
+
+### Privacy Controls
+- **Visual Privacy Indicators**: 
+  - Color-coded nodes based on privacy level
+  - Secure channel visualization
+  - Privacy agent monitoring indicators
+- **Interactive Privacy Settings**:
+  - Real-time privacy level adjustment
+  - Data type protection toggles
+  - Consent management
+  - Privacy demo with live masking
+
+### Performance Optimizations
+- **Efficient Rendering**:
+  - Memoized components for better performance
+  - Optimized layout calculations
+  - Smooth animations and transitions
+- **Responsive Design**:
+  - Mobile-friendly interface
+  - Adaptive layout for different screen sizes
+  - Touch-friendly interactions
 
 ## Technical Implementation
 
 ### Agent Types
-1. **Base Agents**
-   - Foundation for all agent operations
-   - Core security implementation
-   - Basic task processing capabilities
-
-2. **Coordinator Agents**
-   - Workflow management
-   - Task delegation
-   - Performance monitoring
-   - Resource allocation
-
-3. **Temporary (Swarm) Agents**
-   - Dynamic deployment for specific tasks
-   - Automatic cleanup after task completion
-   - Minimal privilege access
-   - Time-limited operations
-
-4. **Service Agents**
-   - Specialized task execution
-   - Domain-specific operations
-   - Integration with external systems
-
-5. **Location Agents**
-   - Geographic-specific operations
-   - Local resource management
-   - Regional compliance enforcement
+1. **Base Agents**: Foundation for all operations, implementing core security and basic task processing.
+2. **Coordinator Agents**: Manage workflows, delegate tasks, and monitor performance.
+3. **Temporary (Swarm) Agents**: Deployed for specific tasks, with automatic cleanup and minimal privileges.
+4. **Service Agents**: Execute specialized tasks and integrate with external systems.
+5. **Location Agents**: Operate in specific geographic areas, managing local resources and compliance.
 
 ### Communication Features
-- **Group Chat**: Secure team collaboration
-- **Dedicated Channels**: Purpose-specific communication paths
-- **Audit Logging**: Comprehensive activity tracking
-- **Privacy Monitoring**: Real-time compliance checking
+- **Group Chat**: Secure collaboration among team members.
+- **Dedicated Channels**: Specific paths for communication, ensuring data is shared appropriately.
+- **Audit Logging**: Comprehensive tracking of activities for security audits.
+- **Privacy Monitoring**: Real-time checks to ensure compliance with privacy standards.
 
 ## Tech Stack
 
 ### Frontend
 - **Framework**: Next.js 14 with TypeScript
 - **UI Components**: Material-UI (MUI)
-- **Visualization**: React Flow for interactive agent network graphs
+- **Visualization**: 
+  - React Flow for interactive agent network graphs
+  - Dagre for automatic layout optimization
+  - Custom node and edge components
+  - Interactive tooltips and hover effects
 - **Styling**: 
   - Emotion (MUI's styling solution)
   - Custom CSS-in-JS with dark mode optimization
   - Responsive design patterns
+  - Smooth animations and transitions
 
 ### Agent System
 - **Core Architecture**: 
@@ -176,6 +200,17 @@ npm run dev
 
 The application will be available at `http://localhost:3000`
 
+### Running Tests
+```bash
+npm test           # Run all tests
+npm run test:watch # Run tests in watch mode
+```
+
+The project uses Jest for testing, with comprehensive tests for:
+- Components
+- API endpoints
+- Utility functions
+
 ### Production Build
 ```bash
 npm run build
@@ -189,6 +224,14 @@ npm start
 - Regular privacy impact assessments
 - Data minimization principles
 - Access control reviews
+- PII detection and masking
+
+## Code Documentation
+The codebase follows consistent documentation standards:
+- JSDoc comments for all functions
+- Comprehensive type definitions
+- Clear component purpose descriptions
+- Security measures documentation
 
 ## Future Enhancements
 - Advanced AI capabilities
@@ -196,6 +239,7 @@ npm start
 - Additional industry-specific modules
 - Enhanced compliance automation
 - Expanded monitoring capabilities
+- Expanded test coverage
 
 ## Contributing
 [Contribution guidelines to be added]

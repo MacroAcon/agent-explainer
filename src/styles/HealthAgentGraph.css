@@ -29,29 +29,217 @@
 
 /* Add smooth transitions for node interactions */
 .react-flow__node {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  will-change: transform, box-shadow;
+  padding: 6px;
+  border-radius: 5px;
+  width: 300px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  border-width: 2px;
+  border-style: solid;
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  min-height: auto;
 }
 
-.react-flow__node:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+.react-flow__node-default {
+  border-color: #90caf9;
+  background-color: rgba(144, 202, 249, 0.1);
 }
 
-/* Improve edge animations */
+.react-flow__node-coordinator {
+  border-color: #42a5f5;
+  background-color: rgba(66, 165, 245, 0.1);
+}
+
+.react-flow__node-swarm_coordinator {
+  border-color: #42a5f5;
+  background-color: rgba(66, 165, 245, 0.1);
+}
+
+.react-flow__node-operations {
+  border-color: #81c784;
+  background-color: rgba(129, 199, 132, 0.1);
+}
+
+.react-flow__node-location {
+  border-color: #80cbc4;
+  background-color: rgba(128, 203, 196, 0.1);
+}
+
+.react-flow__node-service {
+  border-color: #ce93d8;
+  background-color: rgba(206, 147, 216, 0.1);
+}
+
+.react-flow__node-swarm_agent {
+  border-color: #ce93d8;
+  background-color: rgba(206, 147, 216, 0.05);
+}
+
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+}
+
+.react-flow__handle-top {
+  top: -4px;
+}
+
+.react-flow__handle-bottom {
+  bottom: -4px;
+}
+
 .react-flow__edge-path {
-  transition: stroke-width 0.2s ease;
-}
-
-.react-flow__edge:hover .react-flow__edge-path {
   stroke-width: 3;
 }
 
-/* Add smooth transitions for controls */
-.react-flow__controls {
-  transition: opacity 0.2s ease;
+.react-flow__edge-text {
+  font-size: 12px;
+  fill: #fff;
+  font-weight: 500;
+  background-color: rgba(30, 30, 30, 0.9);
+  padding: 2px 4px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-.react-flow__controls:hover {
-  opacity: 1;
+.react-flow__controls {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.react-flow__controls-button {
+  background-color: #1e1e1e;
+  border-color: #333;
+  color: #fff;
+}
+
+.react-flow__controls-button:hover {
+  background-color: #2a2a2a;
+}
+
+.react-flow__minimap {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.health-agent-graph {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.legend {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 10px;
+  color: #fff;
+  font-size: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.legend-title {
+  font-weight: 500;
+  margin: 0;
+}
+
+.legend-toggle {
+  color: #888;
+  font-size: 10px;
+  margin: 0;
+}
+
+.legend-content {
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+.legend-text {
+  margin: 0;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .react-flow__node {
+    width: 150px;
+    font-size: 10px;
+  }
+
+  .legend {
+    font-size: 10px;
+  }
+
+  .legend-color {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.node-content {
+  padding: 4px;
+  min-width: 300px;
+  max-width: 400px;
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+.node-label {
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.node-description {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.node-tools {
+  margin-top: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.node-channels {
+  margin-top: 2px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.edge-label {
+  font-size: 11px;
+  color: #fff;
+  background: rgba(30, 30, 30, 0.9);
+  padding: 2px 4px;
+  border-radius: 2px;
+  pointer-events: none;
+  user-select: none;
 } 

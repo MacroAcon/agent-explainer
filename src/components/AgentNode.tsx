@@ -52,41 +52,41 @@ const AgentNode = ({ data }: { data: AgentNodeData }) => {
       <Handle type="target" position={Position.Top} style={{ background: nodeColor }} />
       
       {/* Header */}
-      <Box sx={{ p: 2, bgcolor: nodeColor, color: 'white' }}>
+      <Box sx={{ p: 1.5, bgcolor: nodeColor, color: 'white' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <BusinessIcon />
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ fontSize: '0.9rem' }}>
             {data.label}
           </Typography>
           {hasGroupChat && (
             <Box sx={{ 
-              width: 24,
-              height: 24,
+              width: 20,
+              height: 20,
               backgroundColor: 'rgba(30, 30, 30, 0.7)',
               border: '2px solid #fff',
               borderRadius: '4px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '14px'
+              fontSize: '12px'
             }}>
               <span role="img" aria-label="group chat">💬</span>
             </Box>
           )}
         </Box>
-        <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
+        <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.9, fontSize: '0.75rem', lineHeight: 1.2 }}>
           {data.description}
         </Typography>
       </Box>
 
       {/* Content */}
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 1.5 }}>
         {/* Channels */}
         {data.channels && data.channels.length > 0 && (
-          <Box sx={{ mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+          <Box sx={{ mb: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
               <RouterIcon fontSize="small" />
-              <Typography variant="subtitle2" color="text.secondary">
+              <Typography variant="subtitle2" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
                 Channels
               </Typography>
             </Box>
@@ -97,7 +97,14 @@ const AgentNode = ({ data }: { data: AgentNodeData }) => {
                     label={channel.split('_')[0]}
                     size="small"
                     variant="outlined"
-                    sx={{ borderColor: nodeColor }}
+                    sx={{ 
+                      borderColor: nodeColor,
+                      height: '20px',
+                      '& .MuiChip-label': {
+                        padding: '0 6px',
+                        fontSize: '0.65rem'
+                      }
+                    }}
                   />
                 </Tooltip>
               ))}
@@ -108,9 +115,9 @@ const AgentNode = ({ data }: { data: AgentNodeData }) => {
         {/* Tools */}
         {data.tools && data.tools.length > 0 && (
           <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
               <BuildIcon fontSize="small" />
-              <Typography variant="subtitle2" color="text.secondary">
+              <Typography variant="subtitle2" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
                 Tools
               </Typography>
             </Box>
@@ -121,7 +128,14 @@ const AgentNode = ({ data }: { data: AgentNodeData }) => {
                     label={tool.split('_')[0]}
                     size="small"
                     variant="outlined"
-                    sx={{ borderColor: nodeColor }}
+                    sx={{ 
+                      borderColor: nodeColor,
+                      height: '20px',
+                      '& .MuiChip-label': {
+                        padding: '0 6px',
+                        fontSize: '0.65rem'
+                      }
+                    }}
                   />
                 </Tooltip>
               ))}

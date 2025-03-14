@@ -4,33 +4,36 @@ from decimal import Decimal
 from .hipaa_compliant_agent import HIPAACompliantAgent
 
 class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
-    """Agent for managing local supplier relationships and community events in Calhoun, GA."""
+    """Agent for managing supplier relationships across local, national, and international suppliers in Calhoun, GA."""
     
     def __init__(self, name: str = "LocalSupplierIntegration"):
-        system_message = """You are a local supplier and community integration specialist for businesses in Calhoun, GA, responsible for:
-        1. Managing relationships with local farmers and producers
-        2. Coordinating seasonal ingredient availability
+        system_message = """You are a supplier integration specialist for businesses in Calhoun, GA, responsible for:
+        1. Managing relationships with local, national, and international suppliers
+        2. Coordinating seasonal ingredient availability across different supplier types
         3. Tracking community events and festivals
-        4. Organizing farm-to-table programs
-        5. Managing supplier certifications and compliance
-        6. Coordinating bulk purchasing programs
+        4. Organizing farm-to-table programs with local suppliers
+        5. Managing supplier certifications and compliance across regions
+        6. Coordinating bulk purchasing programs with all supplier types
         7. Developing sustainable sourcing initiatives
         8. Planning community engagement activities
         9. Managing local food education programs
         10. Coordinating cross-business collaborations
-        11. Tracking local market prices and trends
+        11. Tracking market prices and trends across regions
         12. Managing emergency supplier backup plans
+        13. Optimizing supply chain costs across different supplier types
+        14. Managing import/export compliance for international suppliers
+        15. Coordinating logistics for different supplier types
         """
         
         tools = [
             {
                 "name": "manage_suppliers",
-                "description": "Manage local supplier relationships",
+                "description": "Manage relationships with local, national, and international suppliers",
                 "func": self.manage_suppliers
             },
             {
                 "name": "track_ingredients",
-                "description": "Track seasonal ingredients",
+                "description": "Track seasonal ingredients across different supplier types",
                 "func": self.track_ingredients
             },
             {
@@ -45,12 +48,12 @@ class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
             },
             {
                 "name": "verify_compliance",
-                "description": "Verify supplier compliance",
+                "description": "Verify supplier compliance across regions",
                 "func": self.verify_compliance
             },
             {
                 "name": "coordinate_purchasing",
-                "description": "Coordinate bulk purchasing",
+                "description": "Coordinate bulk purchasing across supplier types",
                 "func": self.coordinate_purchasing
             },
             {
@@ -70,8 +73,18 @@ class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
             },
             {
                 "name": "track_market",
-                "description": "Track local market trends",
+                "description": "Track market trends across regions",
                 "func": self.track_market
+            },
+            {
+                "name": "manage_logistics",
+                "description": "Manage logistics for different supplier types",
+                "func": self.manage_logistics
+            },
+            {
+                "name": "optimize_costs",
+                "description": "Optimize supply chain costs across supplier types",
+                "func": self.optimize_costs
             }
         ]
         
@@ -82,13 +95,25 @@ class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
         supplier_data: Dict[str, Any],
         context: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Manage relationships with local suppliers."""
+        """Manage relationships with local, national, and international suppliers."""
         supplier_result = {
             "supplier_id": f"SUP{datetime.utcnow().strftime('%Y%m%d%H%M')}",
             "suppliers": {
-                "farmers": supplier_data.get("farmers", []),
-                "producers": supplier_data.get("producers", []),
-                "artisans": supplier_data.get("artisans", [])
+                "local": {
+                    "farmers": supplier_data.get("local_farmers", []),
+                    "producers": supplier_data.get("local_producers", []),
+                    "artisans": supplier_data.get("local_artisans", [])
+                },
+                "national": {
+                    "distributors": supplier_data.get("national_distributors", []),
+                    "wholesalers": supplier_data.get("national_wholesalers", []),
+                    "specialty": supplier_data.get("national_specialty", [])
+                },
+                "international": {
+                    "importers": supplier_data.get("international_importers", []),
+                    "specialty": supplier_data.get("international_specialty", []),
+                    "seasonal": supplier_data.get("international_seasonal", [])
+                }
             },
             "relationships": {
                 "active": [],
@@ -98,7 +123,8 @@ class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
             "performance_metrics": {
                 "quality_ratings": {},
                 "delivery_reliability": {},
-                "price_competitiveness": {}
+                "price_competitiveness": {},
+                "regional_comparison": {}
             },
             "communication_log": {
                 "meetings": [],
@@ -109,6 +135,16 @@ class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
                 "jobs_supported": 0,
                 "economic_impact": 0.0,
                 "community_benefits": []
+            },
+            "cost_optimization": {
+                "local_vs_imported": {},
+                "bulk_purchasing": {},
+                "seasonal_adjustments": {}
+            },
+            "compliance": {
+                "local_regulations": [],
+                "national_regulations": [],
+                "international_regulations": []
             }
         }
         
@@ -413,6 +449,104 @@ class LocalSupplierIntegrationAgent(HIPAACompliantAgent):
         }
         
         return market_result
+    
+    async def manage_logistics(
+        self,
+        logistics_data: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Manage logistics for different supplier types."""
+        logistics_result = {
+            "logistics_id": f"LOG{datetime.utcnow().strftime('%Y%m%d%H%M')}",
+            "local_delivery": {
+                "routes": logistics_data.get("local_routes", []),
+                "vehicles": logistics_data.get("local_vehicles", []),
+                "schedule": logistics_data.get("local_schedule", {})
+            },
+            "national_shipping": {
+                "carriers": logistics_data.get("national_carriers", []),
+                "warehouses": logistics_data.get("national_warehouses", []),
+                "transit_times": logistics_data.get("national_transit_times", {})
+            },
+            "international_shipping": {
+                "freight_forwarders": logistics_data.get("international_forwarders", []),
+                "ports": logistics_data.get("ports", []),
+                "customs": logistics_data.get("customs_info", {})
+            },
+            "inventory_management": {
+                "local_storage": {},
+                "warehouse_storage": {},
+                "cold_storage": {}
+            },
+            "delivery_optimization": {
+                "route_planning": {},
+                "load_balancing": {},
+                "cost_analysis": {}
+            },
+            "risk_management": {
+                "weather_impact": {},
+                "traffic_patterns": {},
+                "emergency_plans": {}
+            }
+        }
+        
+        return logistics_result
+    
+    async def optimize_costs(
+        self,
+        cost_data: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Optimize supply chain costs across supplier types."""
+        cost_result = {
+            "optimization_id": f"OPT{datetime.utcnow().strftime('%Y%m%d%H%M')}",
+            "cost_analysis": {
+                "local_suppliers": {
+                    "raw_materials": cost_data.get("local_raw_materials", {}),
+                    "processing": cost_data.get("local_processing", {}),
+                    "delivery": cost_data.get("local_delivery", {})
+                },
+                "national_suppliers": {
+                    "raw_materials": cost_data.get("national_raw_materials", {}),
+                    "processing": cost_data.get("national_processing", {}),
+                    "shipping": cost_data.get("national_shipping", {})
+                },
+                "international_suppliers": {
+                    "raw_materials": cost_data.get("international_raw_materials", {}),
+                    "processing": cost_data.get("international_processing", {}),
+                    "import_costs": cost_data.get("import_costs", {})
+                }
+            },
+            "optimization_strategies": {
+                "bulk_purchasing": {
+                    "opportunities": [],
+                    "savings_potential": {},
+                    "implementation_plan": []
+                },
+                "supplier_negotiation": {
+                    "current_rates": {},
+                    "target_rates": {},
+                    "negotiation_points": []
+                },
+                "logistics_optimization": {
+                    "route_improvements": [],
+                    "carrier_optimization": {},
+                    "warehouse_optimization": {}
+                }
+            },
+            "cost_reduction": {
+                "short_term": [],
+                "medium_term": [],
+                "long_term": []
+            },
+            "performance_metrics": {
+                "cost_per_unit": {},
+                "delivery_efficiency": {},
+                "quality_metrics": {}
+            }
+        }
+        
+        return cost_result
     
     def _calculate_economic_impact(self, data: Dict[str, Any]) -> Decimal:
         """Calculate the local economic impact of supplier relationships."""

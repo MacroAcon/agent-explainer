@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Box, Typography, Tab, Tabs } from '@mui/material';
 import AgentGraph from '../components/AgentGraph';
 import HealthAgentGraph from '../components/HealthAgentGraph';
+import PrivacySettings from '../components/PrivacySettings';
 import ReactMarkdown from 'react-markdown';
 import { GetStaticProps } from 'next';
 import fs from 'fs/promises';
@@ -81,8 +82,15 @@ interface HomeProps {
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const readmePath = path.join(process.cwd(), 'README.md');
-  const readmeContent = await fs.readFile(readmePath, 'utf8');
+  let readmeContent = '';
+  
+  try {
+    const readmePath = path.join(process.cwd(), 'README.md');
+    readmeContent = await fs.readFile(readmePath, 'utf8');
+  } catch (error) {
+    console.error('Error loading README.md:', error);
+    readmeContent = '# Documentation\n\nDocumentation content will be available soon.';
+  }
   
   return {
     props: {
@@ -99,67 +107,35 @@ export default function Home({ readmeContent }: HomeProps) {
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
-      backgroundColor: '#121212',
-      pb: 4
-    }}>
-      <Container maxWidth="xl">
-        <Box sx={{ width: '100%', pt: 4 }}>
-          <Typography 
-            variant="h4" 
-            component="h1" 
-            gutterBottom 
-            sx={{ 
-              color: '#90caf9', 
-              textAlign: 'center', 
-              mb: 4,
-              fontWeight: 500
-            }}
-          >
-            A&A Calhoun Automation Consultancy - AI Agent System Examples
-          </Typography>
-
-          <Box sx={{ 
-            borderBottom: 1, 
-            borderColor: 'rgba(255, 255, 255, 0.12)',
-            mb: 3
-          }}>
-            <Tabs 
-              value={value} 
-              onChange={handleChange} 
-              aria-label="agent system tabs"
-              sx={{
-                '& .MuiTab-root': {
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  '&.Mui-selected': {
-                    color: '#90caf9'
-                  }
-                },
-                '& .MuiTabs-indicator': {
-                  backgroundColor: '#90caf9'
-                }
-              }}
-            >
-              <Tab label="Retail Example" {...a11yProps(0)} />
-              <Tab label="Health Service Example" {...a11yProps(1)} />
-              <Tab label="Documentation" {...a11yProps(2)} />
-            </Tabs>
-          </Box>
-
-          <TabPanel value={value} index={0}>
-            <AgentGraph />
-          </TabPanel>
-
-          <TabPanel value={value} index={1}>
-            <HealthAgentGraph />
-          </TabPanel>
-
-          <TabPanel value={value} index={2}>
-            <ReadmeContent content={readmeContent} />
-          </TabPanel>
-        </Box>
-      </Container>
-    </Box>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom>
+        CalCon Agent Framework
+      </Typography>
+      
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs value={value} onChange={handleChange} aria-label="agent tabs">
+          <Tab label="Restaurant Operations" {...a11yProps(0)} />
+          <Tab label="Healthcare Operations" {...a11yProps(1)} />
+          <Tab label="Documentation" {...a11yProps(2)} />
+        </Tabs>
+      </Box>
+      
+      <TabPanel value={value} index={0}>
+        <AgentGraph />
+      </TabPanel>
+      
+      <TabPanel value={value} index={1}>
+        <HealthAgentGraph />
+      </TabPanel>
+      
+      <TabPanel value={value} index={2}>
+        <ReadmeContent content={readmeContent} />
+      </TabPanel>
+      
+      <PrivacySettings />
+    </Container>
   );
-} 
+}
+
+// Export to ensure proper page resolution
+export { Home }; 

@@ -16,6 +16,11 @@
 # misc
 .DS_Store
 *.pem
+*.log
+*.lock
+*.pyc
+__pycache__/
+.pytest_cache/
 
 # debug
 npm-debug.log*
@@ -23,11 +28,31 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env*.local
+.env.development
+.env.test
+.env.production
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts 
+next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+venv/
+env/
+ENV/
+.env/
+.venv/
+
+# Netlify
+.netlify/ 

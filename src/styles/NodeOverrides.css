@@ -1,0 +1,119 @@
+/* Extreme overrides to fix white background nodes */
+
+/* Target ReactFlow node elements directly */
+.react-flow__node {
+  background: #1e1e1e !important;
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+}
+
+/* Target the node content containers */
+.node-content {
+  background: #1e1e1e !important;
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+}
+
+/* Override specific node types */
+.react-flow__node.react-flow__node-default {
+  background-color: #1e1e1e !important;
+  background: #1e1e1e !important;
+}
+
+/* Target all papers in nodes */
+.react-flow__node .MuiPaper-root {
+  background-color: #1e1e1e !important;
+  background: #1e1e1e !important;
+}
+
+/* Target typography elements within nodes */
+.react-flow__node .MuiTypography-root {
+  color: #ffffff !important;
+}
+
+.node-label {
+  color: #ffffff !important;
+}
+
+.node-description {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Force all node elements to inherit background color */
+.react-flow__node * {
+  background-color: inherit;
+}
+
+/* Apply the styles inline (this is picked up by the browser more reliably) */
+[style*="background-color: white"],
+[style*="background-color: #fff"],
+[style*="background-color: rgb(255, 255, 255)"] {
+  background-color: #1e1e1e !important;
+}
+
+/* Add !important to all inline styles */
+[style*="background-color:"] {
+  background-color: #1e1e1e !important;
+}
+
+/* Enhanced glow effects for temporary agents */
+.react-flow__node[data-type="default"] {
+  box-shadow: 0 0 6px rgba(144, 202, 249, 0.3) !important;
+}
+
+.react-flow__node[data-type="coordinator"] {
+  box-shadow: 0 0 6px rgba(66, 165, 245, 0.3) !important;
+}
+
+.react-flow__node[data-type="swarm_coordinator"] {
+  box-shadow: 0 0 6px rgba(66, 165, 245, 0.3) !important;
+}
+
+.react-flow__node[data-type="operations"] {
+  box-shadow: 0 0 6px rgba(129, 199, 132, 0.3) !important;
+}
+
+.react-flow__node[data-type="location"] {
+  box-shadow: 0 0 6px rgba(128, 203, 196, 0.3) !important;
+}
+
+.react-flow__node[data-type="service"] {
+  box-shadow: 0 0 6px rgba(206, 147, 216, 0.3) !important;
+}
+
+.react-flow__node[data-type="marketing"] {
+  box-shadow: 0 0 6px rgba(255, 183, 77, 0.3) !important;
+}
+
+/* Give temporary agents pronounced glow */
+.react-flow__node[data-type="swarm_agent"] {
+  box-shadow: 0 0 18px rgba(206, 147, 216, 0.6), 0 0 30px rgba(206, 147, 216, 0.3) !important;
+}
+
+/* Add hover effects to make the glow even more pronounced on hover for temporary agents */
+.react-flow__node[data-type="swarm_agent"]:hover {
+  box-shadow: 0 0 25px rgba(206, 147, 216, 0.7), 0 0 40px rgba(206, 147, 216, 0.4) !important;
+  transform: translateY(-2px);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+}
+
+/* Style for tool and channel chips */
+.react-flow__node .MuiChip-root {
+  transition: all 0.2s ease;
+}
+
+.react-flow__node .MuiChip-root:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.2);
+}
+
+/* Add slight difference between tools and channels */
+.react-flow__node .MuiChip-root[data-type="tool"]:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.react-flow__node .MuiChip-root[data-type="channel"]:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+} 

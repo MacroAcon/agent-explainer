@@ -1,0 +1,81 @@
+/* Dark Nodes Styling - High Specificity Overrides */
+
+/* General node styles */
+.react-flow__renderer .react-flow__nodes .react-flow__node {
+  background-color: #1e1e1e !important;
+  background: #1e1e1e !important;
+  color: #ffffff !important;
+  border-color: #555 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Type-specific styles */
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="default"] {
+  background-color: rgba(144, 202, 249, 0.1) !important;
+  background: rgba(144, 202, 249, 0.1) !important;
+  border-color: #90caf9 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="coordinator"] {
+  background-color: rgba(66, 165, 245, 0.1) !important;
+  background: rgba(66, 165, 245, 0.1) !important;
+  border-color: #42a5f5 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="swarm_coordinator"] {
+  background-color: rgba(66, 165, 245, 0.1) !important;
+  background: rgba(66, 165, 245, 0.1) !important;
+  border-color: #42a5f5 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="operations"] {
+  background-color: rgba(129, 199, 132, 0.1) !important;
+  background: rgba(129, 199, 132, 0.1) !important;
+  border-color: #81c784 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="location"] {
+  background-color: rgba(128, 203, 196, 0.1) !important;
+  background: rgba(128, 203, 196, 0.1) !important;
+  border-color: #80cbc4 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="service"] {
+  background-color: rgba(206, 147, 216, 0.1) !important;
+  background: rgba(206, 147, 216, 0.1) !important;
+  border-color: #ce93d8 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="swarm_agent"] {
+  background-color: rgba(206, 147, 216, 0.05) !important;
+  background: rgba(206, 147, 216, 0.05) !important;
+  border-color: #ce93d8 !important;
+}
+
+.react-flow__renderer .react-flow__nodes .react-flow__node[data-type="marketing"] {
+  background-color: rgba(255, 183, 77, 0.1) !important;
+  background: rgba(255, 183, 77, 0.1) !important;
+  border-color: #ffb74d !important;
+}
+
+/* Inner text elements */
+.react-flow__renderer .react-flow__nodes .react-flow__node * {
+  color: #ffffff !important;
+}
+
+/* Force dark backgrounds on SVG elements */
+.react-flow__renderer .react-flow__node svg rect,
+.react-flow__renderer .react-flow__node svg path {
+  fill: #1e1e1e !important;
+}
+
+/* Special override for any white elements */
+[style*="background-color: white"],
+[style*="background-color: #fff"],
+[style*="background-color: rgb(255, 255, 255)"],
+[style*="background: white"],
+[style*="background: #fff"],
+[style*="background: rgb(255, 255, 255)"] {
+  background-color: #1e1e1e !important;
+  background: #1e1e1e !important;
+} 
