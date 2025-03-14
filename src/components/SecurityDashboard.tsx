@@ -17,47 +17,7 @@ import {
   Chip
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-
-interface SecurityMetrics {
-  security_state: {
-    last_audit: string;
-    failed_attempts: number;
-    locked_until: string | null;
-    active_sessions: string[];
-  };
-  audit_metrics: {
-    total_events: number;
-    events_last_24h: number;
-    events_by_type: Record<string, number>;
-    events_by_severity: Record<string, number>;
-    events_by_agent: Record<string, number>;
-  };
-  performance_metrics: {
-    system: {
-      cpu_percent: number;
-      memory_percent: number;
-      disk_usage: number;
-      process_count: number;
-    };
-    performance: {
-      avg_response_time: number;
-      active_tasks: number;
-      queue_size: number;
-    };
-    agents: Record<string, {
-      tasks_processed: number;
-      errors: number;
-      avg_response_time: number;
-    }>;
-    alerts: Array<{
-      category: string;
-      type: string;
-      value: number;
-      threshold: number;
-      timestamp: string;
-    }>;
-  };
-}
+import { SecurityMetrics } from '@/types/security';
 
 const SecurityDashboard: React.FC = () => {
   const theme = useTheme();
@@ -73,7 +33,10 @@ const SecurityDashboard: React.FC = () => {
           throw new Error('Failed to fetch security metrics');
         }
         const data = await response.json();
-        setMetrics(data);
+        if (!data.data) {
+          throw new Error('Invalid metrics data format');
+        }
+        setMetrics(data.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
@@ -131,9 +94,11 @@ const SecurityDashboard: React.FC = () => {
                 Security State
               </Typography>
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2">
-                  Last Audit: {new Date(metrics.security_state.last_audit).toLocaleString()}
-                </Typography>
+                {metrics.security_state.last_audit && (
+                  <Typography variant="body2">
+                    Last Audit: {new Date(metrics.security_state.last_audit).toLocaleString()}
+                  </Typography>
+                )}
                 <Typography variant="body2">
                   Failed Attempts: {metrics.security_state.failed_attempts}
                 </Typography>
