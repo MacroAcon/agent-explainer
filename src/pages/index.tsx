@@ -135,7 +135,4 @@ export default function Home({ readmeContent }: HomeProps) {
       <PrivacySettings />
     </Container>
   );
-}
-
-// Export to ensure proper page resolution
-export { Home }; 
+} 
