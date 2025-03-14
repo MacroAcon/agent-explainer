@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Box, Typography, Tab, Tabs } from '@mui/material';
+import { Container, Box, Typography, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
 import AgentGraph from '../components/AgentGraph';
 import HealthAgentGraph from '../components/HealthAgentGraph';
 import PrivacySettings from '../components/PrivacySettings';
@@ -101,6 +101,8 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
 
 export default function Home({ readmeContent }: HomeProps) {
   const [value, setValue] = React.useState(0);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -112,8 +114,21 @@ export default function Home({ readmeContent }: HomeProps) {
         CalCon Agent Framework
       </Typography>
       
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        <Tabs value={value} onChange={handleChange} aria-label="agent tabs">
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3, width: '100%' }}>
+        <Tabs 
+          value={value} 
+          onChange={handleChange} 
+          aria-label="agent tabs"
+          variant={isMobile ? "scrollable" : "standard"}
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          sx={{ 
+            maxWidth: '100%',
+            '& .MuiTabs-flexContainer': {
+              flexWrap: isMobile ? 'nowrap' : 'wrap'
+            }
+          }}
+        >
           <Tab label="Restaurant Operations" {...a11yProps(0)} />
           <Tab label="Healthcare Operations" {...a11yProps(1)} />
           <Tab label="Documentation" {...a11yProps(2)} />
