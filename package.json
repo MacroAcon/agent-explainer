@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "python -m pip install --upgrade pip && pip install -r requirements.txt",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.10.0",
     "eslint": "^8.56.0",
-    "eslint-config-next": "14.1.0"
+    "eslint-config-next": "14.1.0",
+    "netlify-plugin-cache": "^1.0.3"
   }
 }
