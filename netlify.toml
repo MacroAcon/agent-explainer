@@ -1,6 +1,7 @@
 [build]
   base = "/"
   command = """
+    apt-get update && apt-get install -y build-essential curl &&
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
     export PATH="/opt/buildhome/.cargo/bin:$PATH" &&
     rustup default stable &&
@@ -12,6 +13,7 @@
 [build.environment]
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
   NODE_VERSION = "18"
+  PYTHON_VERSION = "3.11"
   RUSTUP_HOME = "/opt/buildhome/.rustup"
   CARGO_HOME = "/opt/buildhome/.cargo"
   PATH = "/opt/buildhome/.cargo/bin:${PATH}"
