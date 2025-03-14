@@ -11,10 +11,14 @@ import ReactFlow, {
   Connection,
   EdgeChange,
   NodeChange,
-  BackgroundVariant
+  BackgroundVariant,
+  EdgeProps,
+  Panel,
+  useReactFlow
 } from 'reactflow';
 import { Box, Paper, Typography } from '@mui/material';
 import 'reactflow/dist/style.css';
+import '@/styles/HealthAgentGraph.css';
 import AgentNode from '@/components/AgentNode';
 
 const nodeTypes = {
@@ -29,8 +33,9 @@ const getNodeStyle = (type: string) => {
     boxShadow: '0 0 10px rgba(144, 202, 249, 0.3)',
     backgroundColor: '#1e1e1e',
     color: '#fff',
-    padding: '10px',
-    minWidth: '180px'
+    padding: '8px',
+    minWidth: '150px',
+    fontSize: '0.9rem'
   };
 
   switch (type) {
@@ -51,8 +56,8 @@ const getNodeStyle = (type: string) => {
         `,
         backgroundSize: '200% 100%',
         animation: 'gradient 8s linear infinite',
-        padding: '20px',
-        minWidth: '200px',
+        padding: '12px',
+        minWidth: '160px',
         borderRadius: '4px',
         borderWidth: '3px',
         borderStyle: 'solid',
@@ -69,8 +74,8 @@ const getNodeStyle = (type: string) => {
         `,
         backgroundSize: '200% 100%',
         animation: 'gradient 8s linear infinite',
-        padding: '20px',
-        minWidth: '200px',
+        padding: '12px',
+        minWidth: '160px',
         borderRadius: '4px',
         borderWidth: '3px',
         borderStyle: 'solid',
@@ -98,8 +103,8 @@ const getNodeStyle = (type: string) => {
         border: 'none',
         backgroundColor: 'rgba(30, 30, 30, 0.7)',
         boxShadow: '0 0 30px rgba(128, 203, 196, 0.6), inset 0 0 20px rgba(128, 203, 196, 0.3)',
-        minWidth: '160px',
-        minHeight: '160px',
+        minWidth: '140px',
+        minHeight: '140px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -128,13 +133,19 @@ const Legend = () => {
         transition: 'all 0.3s ease',
         cursor: 'pointer',
         maxHeight: isExpanded ? '500px' : '40px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        '@media (max-width: 600px)': {
+          top: 10,
+          right: 10,
+          p: 1.5,
+          maxWidth: '90%'
+        }
       }}
       onClick={() => setIsExpanded(!isExpanded)}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: isExpanded ? 2 : 0 }}>
         <Typography variant="h6" sx={{ m: 0 }}>Legend</Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
+        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
           {isExpanded ? '(click to collapse)' : '(click to expand)'}
         </Typography>
       </Box>
@@ -569,7 +580,7 @@ const CustomEdge = ({
   targetY,
   style = {},
   data,
-}: any) => {
+}: EdgeProps<Edge>) => {
   const edgePath = `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`;
   const labelX = (sourceX + targetX) / 2;
   const labelY = (sourceY + targetY) / 2;
@@ -584,21 +595,22 @@ const CustomEdge = ({
       />
       {data?.label && (
         <foreignObject
-          x={labelX - 75}
-          y={labelY - 15}
-          width={150}
-          height={30}
+          x={labelX - 60}
+          y={labelY - 12}
+          width={120}
+          height={24}
           style={{ 
             background: 'rgba(255,255,255,0.9)',
             borderRadius: '4px',
             padding: '2px 4px',
-            fontSize: '10px',
             textAlign: 'center',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             pointerEvents: 'none'
           }}
         >
-          {data.label}
+          <div className="edge-label">
+            {data.label}
+          </div>
         </foreignObject>
       )}
     </>
@@ -615,6 +627,7 @@ const HealthAgentGraph = () => {
     style: getNodeStyle(node.data.type)
   })));
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { fitView } = useReactFlow();
 
   const onConnect = useCallback((params: Connection) => {
     setEdges((eds: Edge[]) => addEdge({
@@ -625,19 +638,6 @@ const HealthAgentGraph = () => {
 
   return (
     <div style={{ width: '100%', height: '90vh', background: '#121212', position: 'relative' }}>
-      <style>
-        {`
-          @keyframes gradient {
-            0% {
-              background-position: 0 0;
-            }
-            100% {
-              background-position: 200% 0;
-            }
-          }
-        `}
-      </style>
-      <Legend />
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -647,12 +647,17 @@ const HealthAgentGraph = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
-        minZoom={0.5}
-        maxZoom={1.5}
-        fitViewOptions={{ padding: 0.3 }}
+        minZoom={0.2}
+        maxZoom={2}
+        fitViewOptions={{ 
+          padding: 0.2,
+          minZoom: 0.2,
+          maxZoom: 2
+        }}
         attributionPosition="bottom-right"
         snapToGrid={true}
-        snapGrid={[25, 25]}
+        snapGrid={[20, 20]}
+        proOptions={{ hideAttribution: true }}
       >
         <Background 
           gap={25} 
@@ -692,6 +697,9 @@ const HealthAgentGraph = () => {
           }}
           maskColor="#12121280"
         />
+        <Panel position="top-right">
+          <Legend />
+        </Panel>
       </ReactFlow>
     </div>
   );
