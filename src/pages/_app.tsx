@@ -4,6 +4,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { theme } from '../styles/theme';
 import { PrivacyProvider } from '../components/PrivacyContext';
 import ErrorBoundary from '../components/ErrorBoundary';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import 'reactflow/dist/style.css';
 import '../styles/NodeOverrides.css';
 import '../styles/DarkNodes.css';
@@ -13,9 +15,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <PrivacyProvider>
-          <Component {...pageProps} />
-        </PrivacyProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <PrivacyProvider>
+            <Component {...pageProps} />
+          </PrivacyProvider>
+        </LocalizationProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

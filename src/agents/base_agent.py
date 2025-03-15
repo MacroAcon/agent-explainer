@@ -1,69 +1,72 @@
 from typing import List, Dict, Any, Optional
-from ag2 import SwarmAgent, UserProxyAgent, Memory, ToolChain
-from ..config.config import settings
-from ..config.enhanced_settings import enhanced_settings
 import asyncio
 from datetime import datetime, timedelta
 import json
 import hashlib
+import logging
 
-class BaseBusinessAgent(SwarmAgent):
-    """Base agent class for business automation tasks with enhanced memory and performance."""
+logger = logging.getLogger(__name__)
+
+class BaseBusinessAgent:
+    """Base class for all business agents"""
     
-    def __init__(
-        self,
-        name: str,
-        system_message: str,
-        tools: List[Dict[str, Any]] = None,
-        **kwargs
-    ):
-        super().__init__(
-            name=name,
-            system_message=system_message,
-            llm_config={
-                "model": settings.MODEL_NAME,
-                "temperature": settings.TEMPERATURE,
-                "api_key": settings.API_KEY,
-            },
-            **kwargs
-        )
+    def __init__(self, name: str, system_message: str = None, tools: List[Dict[str, Any]] = None):
+        self.name = name
+        self.system_message = system_message or "I am a business agent."
+        self.tools = tools or []
+        self.memory: List[Dict[str, Any]] = []
+        self.state: Dict[str, Any] = {}
         
-        # Initialize enhanced memory systems with compression and pruning
-        self.long_term_memory = Memory(
-            memory_type="long_term",
-            capacity=enhanced_settings.memory.long_term_capacity,
-            compression_strategy=enhanced_settings.memory.compression_strategy,
-            pruning_threshold=enhanced_settings.memory.pruning_threshold
-        )
+    def add_memory(self, content: str, memory_type: str = "general", metadata: Dict[str, Any] = None):
+        """Add an item to agent's memory"""
+        memory_item = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "content": content,
+            "type": memory_type,
+            "metadata": metadata or {}
+        }
+        self.memory.append(memory_item)
         
-        self.working_memory = Memory(
-            memory_type="working",
-            ttl=enhanced_settings.memory.working_memory_ttl
-        )
+    def get_memories(self, memory_type: Optional[str] = None, limit: int = 10) -> List[Dict[str, Any]]:
+        """Retrieve memories, optionally filtered by type"""
+        if memory_type:
+            filtered = [m for m in self.memory if m["type"] == memory_type]
+        else:
+            filtered = self.memory
         
-        self.episodic_memory = Memory(
-            memory_type="episodic",
-            index_strategy="temporal",
-            max_entries=enhanced_settings.memory.max_episodic_entries
-        )
-        
-        # Initialize enhanced tool chain with parallel execution and caching
-        self.tool_chain = ToolChain(
-            validation_strategy="strict",
-            error_handling="graceful",
-            metrics_enabled=True,
-            parallel_execution=enhanced_settings.performance.parallel_execution,
-            result_caching=enhanced_settings.performance.result_caching,
-            cache_ttl=enhanced_settings.performance.cache_ttl
-        )
-        
-        # Initialize response cache
-        self.response_cache = {}
-        self.last_cleanup = datetime.now()
-        
-        if tools:
-            self.register_tools(tools)
+        return sorted(filtered, key=lambda x: x["timestamp"], reverse=True)[:limit]
     
+    def update_state(self, key: str, value: Any):
+        """Update agent's state"""
+        self.state[key] = value
+        self.add_memory(
+            f"State updated: {key} = {value}",
+            memory_type="state_change",
+            metadata={"key": key, "value": value}
+        )
+    
+    def get_state(self, key: str) -> Any:
+        """Get value from agent's state"""
+        return self.state.get(key)
+    
+    async def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
+        """Execute a tool by name"""
+        tool = next((t for t in self.tools if t["name"] == tool_name), None)
+        if not tool:
+            raise ValueError(f"Tool {tool_name} not found")
+        
+        try:
+            result = await tool["func"](self, **kwargs)
+            self.add_memory(
+                f"Executed tool: {tool_name}",
+                memory_type="tool_execution",
+                metadata={"tool": tool_name, "result": result}
+            )
+            return result
+        except Exception as e:
+            logger.error(f"Error executing tool {tool_name}: {str(e)}")
+            raise
+
     def _compress_memory(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Compress memory data using semantic compression."""
         if not enhanced_settings.memory.compression_strategy == "semantic":

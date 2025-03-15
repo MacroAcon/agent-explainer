@@ -1,3 +1,7 @@
+"""
+Framework for building business agents
+"""
+
 # Agent Framework - A structured agent architecture inspired by Manus AI
 
 # Core agent components

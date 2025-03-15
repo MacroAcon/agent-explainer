@@ -3,6 +3,7 @@ import { Container, Box, Typography, Tab, Tabs, useMediaQuery, useTheme } from '
 import AgentGraph from '../components/AgentGraph';
 import HealthAgentGraph from '../components/HealthAgentGraph';
 import PrivacySettings from '../components/PrivacySettings';
+import MarketingDemo from '../components/MarketingDemo';
 import ReactMarkdown from 'react-markdown';
 import { GetStaticProps } from 'next';
 import fs from 'fs/promises';
@@ -131,7 +132,8 @@ export default function Home({ readmeContent }: HomeProps) {
         >
           <Tab label="Restaurant Operations" {...a11yProps(0)} />
           <Tab label="Healthcare Operations" {...a11yProps(1)} />
-          <Tab label="Documentation" {...a11yProps(2)} />
+          <Tab label="Marketing Demo" {...a11yProps(2)} />
+          <Tab label="Documentation" {...a11yProps(3)} />
         </Tabs>
       </Box>
       
@@ -144,6 +146,10 @@ export default function Home({ readmeContent }: HomeProps) {
       </TabPanel>
       
       <TabPanel value={value} index={2}>
+        <MarketingDemo />
+      </TabPanel>
+      
+      <TabPanel value={value} index={3}>
         <ReadmeContent content={readmeContent} />
       </TabPanel>
       
