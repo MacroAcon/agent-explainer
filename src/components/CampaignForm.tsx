@@ -1,4 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { privacyManager } from '../security/PrivacyManager';
+import { performanceMonitor } from '../monitoring/PerformanceMonitor';
 import { generateMarketingContent, generateImagePrompt } from '../services/groqService';
 import { 
   Button, 
@@ -37,12 +39,8 @@ import {
   validateFormData,
   createDefaultFormData,
   formatSpecialOffer,
-  CampaignFormData,
-  ValidationResult
 } from '../utils/campaignUtils';
-import { Campaign, TargetAudience } from '../types/campaign';
-import { privacyManager } from '../security/PrivacyManager';
-import { performanceMonitor } from '../monitoring/PerformanceMonitor';
+import { Campaign, TargetAudience, CampaignFormData, ValidationResult } from '../types/campaign';
 
 interface CampaignFormProps {
   onSubmit: (content: any) => void;
@@ -656,7 +654,7 @@ export const CampaignForm: React.FC<CampaignFormProps> = ({ onSubmit, onCancel, 
               <Box key={index} sx={{ display: 'flex', gap: 1, mb: 1 }}>
                 <TextField
                   fullWidth
-                  label={formatSpecialOffer(offer, index)}
+                  label={`Special Offer ${index + 1}`}
                   value={offer}
                   onChange={(e) => handleSpecialOfferChange(index, e.target.value)}
                   error={!!validation.errors.find(e => e.includes(`Special offer ${index + 1}`))}

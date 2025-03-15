@@ -1,25 +1,11 @@
 import { z } from 'zod';
-import { CampaignFormData, ValidationResult } from '../types/campaign';
+import { CampaignFormData as FormData, ValidationResult as ValidationResultType } from '../types/campaign';
 
 export interface ParsedContent {
   headline: string;
   description: string;
   callToAction: string;
   imagePrompt?: string;
-}
-
-export interface CampaignFormData {
-  name: string;
-  designType: 'postcard' | 'letter' | 'brochure';
-  targetArea: string;
-  content: {
-    specialOffers: string[];
-  };
-}
-
-export interface ValidationResult {
-  isValid: boolean;
-  errors: string[];
 }
 
 /**
@@ -50,85 +36,93 @@ export const formatValidationError = (error: z.ZodError): string => {
 };
 
 /**
- * Validates a ZIP code string
- * @param zip ZIP code to validate
- * @returns true if valid, false otherwise
+ * Cleans special offers array by removing empty strings and trimming whitespace
+ * @param offers Array of special offers
+ * @returns Cleaned array of special offers
  */
-export const isValidZipCode = (zipCode: string): boolean => {
-  return /^\d{5}$/.test(zipCode);
+export const cleanSpecialOffers = (offers: string[]): string[] => {
+  if (!offers) return [];
+  return offers.map(offer => offer.trim()).filter(offer => offer.length > 0);
 };
 
 /**
- * Formats a campaign name to be URL and file system safe
- * @param name Raw campaign name
+ * Validates a US ZIP code
+ * @param zipCode ZIP code to validate
+ * @returns True if valid, false otherwise
+ */
+export const isValidZipCode = (zipCode: string): boolean => {
+  return /^\d{5}(-\d{4})?$/.test(zipCode);
+};
+
+/**
+ * Formats a campaign name by capitalizing words and replacing underscores with spaces
+ * @param name Campaign name to format
  * @returns Formatted campaign name
  */
 export const formatCampaignName = (name: string): string => {
-  return name.trim().replace(/\s+/g, ' ');
+  if (!name) return '';
+  return name
+    .replace(/_/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 };
 
 /**
- * Removes empty special offers from the array
- * @param offers Array of special offers
- * @returns Filtered array without empty offers
+ * Formats a special offer for display
+ * @param offer Special offer to format
+ * @returns Formatted special offer
  */
-export const cleanSpecialOffers = (offers: string[]): string[] => {
-  return offers.filter(offer => offer.trim()).map(offer => offer.trim());
+export const formatSpecialOffer = (offer: string): string => {
+  if (!offer) return '';
+  return offer.trim().charAt(0).toUpperCase() + offer.trim().slice(1);
 };
 
 /**
- * Creates a prompt for the AI based on campaign details
+ * Creates an AI prompt for generating marketing content
  * @param campaignName Name of the campaign
  * @param designType Type of design (postcard, letter, brochure)
  * @param targetArea Target ZIP code
  * @param specialOffers Array of special offers
- * @returns Formatted prompt string
+ * @returns Formatted prompt for AI
  */
 export const createAIPrompt = (
   campaignName: string,
   designType: string,
   targetArea: string,
-  specialOffers: string[] = []
+  specialOffers?: string[]
 ): string => {
-  const cleanedOffers = cleanSpecialOffers(specialOffers);
+  let prompt = `Create marketing content for a ${designType} campaign named "${campaignName}" targeting ZIP code ${targetArea}.`;
   
-  return `Create marketing content for a local mailer campaign with these details:
-Campaign Name: ${campaignName}
-Design Type: ${designType}
-Target Area: ${targetArea}
-Special Offers: ${cleanedOffers.length > 0 ? cleanedOffers.join(', ') : 'None specified'}
-
-Generate a compelling headline, description, and call-to-action that will resonate with the target audience.
-Format the response as follows:
-Headline: [your headline]
-Description: [your description]
-Call to Action: [your call to action]`;
+  if (specialOffers && specialOffers.length > 0) {
+    prompt += ` Include these special offers: ${specialOffers.join(', ')}.`;
+  }
+  
+  prompt += ` Return a JSON object with these fields: "headline" (catchy headline), "description" (compelling description), and "callToAction" (strong call to action).`;
+  
+  return prompt;
 };
 
 /**
- * Validates form data before submission
+ * Validates form data
  * @param data Form data to validate
- * @returns Validation result with errors if any
+ * @returns Validation result
  */
-export const validateFormData = (data: CampaignFormData): ValidationResult => {
+export const validateFormData = (data: FormData): ValidationResultType => {
   const errors: string[] = [];
-
-  if (!data.name.trim()) {
+  
+  if (!data.name || data.name.trim().length === 0) {
     errors.push('Campaign name is required');
   }
-
+  
   if (!data.designType) {
     errors.push('Design type is required');
   }
-
-  if (!isValidZipCode(data.targetArea)) {
-    errors.push('Target area must be a valid 5-digit ZIP code');
+  
+  if (!data.targetArea || !isValidZipCode(data.targetArea)) {
+    errors.push('Valid ZIP code is required');
   }
-
-  if (!data.content.specialOffers.length || data.content.specialOffers.some(offer => !offer.trim())) {
-    errors.push('At least one special offer is required');
-  }
-
+  
   return {
     isValid: errors.length === 0,
     errors,
@@ -136,48 +130,29 @@ export const validateFormData = (data: CampaignFormData): ValidationResult => {
 };
 
 /**
- * Creates a default campaign form data object
- * @returns Default campaign form data
+ * Creates default form data
+ * @returns Default form data
  */
-export const createDefaultFormData = (): CampaignFormData => ({
-  name: '',
-  designType: 'postcard',
-  targetArea: '',
-  content: {
-    specialOffers: [''],
-  },
-});
-
-/**
- * Formats a special offer for display
- * @param offer Special offer text
- * @param index Offer index
- * @returns Formatted offer text
- */
-export const formatSpecialOffer = (offer: string, index: number): string => {
-  return `Special Offer ${index + 1}`;
+export const createDefaultFormData = (): FormData => {
+  return {
+    name: '',
+    designType: 'postcard',
+    targetArea: '',
+    content: {
+      specialOffers: [''],
+    },
+  };
 };
 
 /**
- * Truncates text to a specified length
- * @param text Text to truncate
- * @param maxLength Maximum length
- * @returns Truncated text
- */
-export const truncateText = (text: string, maxLength: number): string => {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + '...';
-};
-
-/**
- * Formats a date string into a human-readable format
- * @param dateString ISO date string
+ * Formats a date for display
+ * @param date Date to format
  * @returns Formatted date string
  */
-export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+export const formatDate = (date: Date): string => {
+  return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  });
+  }).format(date);
 }; 

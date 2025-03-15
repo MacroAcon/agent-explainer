@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
-const fetch = require('node-fetch');
+const { Groq } = require('groq-sdk');
 
 // Load environment variables from .env.local
 const envLocalPath = path.resolve(process.cwd(), '.env.local');
@@ -31,38 +31,29 @@ async function testGroq() {
   console.log('Testing Groq with Llama model...');
   
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: MODEL_NAME,
-        messages: [
-          {
-            role: "system",
-            content: "You are an expert marketing copywriter specializing in local business campaigns."
-          },
-          {
-            role: "user",
-            content: "Create a marketing headline and brief description for a local bakery's summer special event."
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      })
+    const client = new Groq({
+      apiKey: GROQ_API_KEY,
     });
 
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
+    const completion = await client.chat.completions.create({
+      model: MODEL_NAME,
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert marketing copywriter specializing in local business campaigns."
+        },
+        {
+          role: "user",
+          content: "Create a marketing headline and brief description for a local bakery's summer special event."
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 500
+    });
 
     console.log('Success! Model response:');
     console.log('-------------------');
-    console.log(data.choices[0]?.message?.content);
+    console.log(completion.choices[0]?.message?.content);
     console.log('-------------------');
     console.log('Model: ', MODEL_NAME);
     console.log('API connected successfully!');

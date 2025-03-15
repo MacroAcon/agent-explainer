@@ -1,3 +1,5 @@
+// This file is no longer needed as we're using the types from groq-sdk
+// The file is kept for backward compatibility but its content is not used
 declare module 'groq' {
   interface GroqConfig {
     apiKey: string;

@@ -104,7 +104,7 @@ export const CampaignDashboard: React.FC = () => {
                   Target Area: {campaign.mailingList.targetZIPCodes.join(', ')}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Created: {formatDate(campaign.createdAt)}
+                  Created: {formatDate(new Date(campaign.createdAt))}
                 </Typography>
                 {campaign.metrics && (
                   <Box sx={{ mt: 2 }}>

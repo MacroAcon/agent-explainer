@@ -1,4 +1,4 @@
-import Groq from 'groq';
+import Groq from 'groq-sdk';
 import { z } from 'zod';
 import { createAIPrompt, formatValidationError } from '../utils/campaignUtils';
 
