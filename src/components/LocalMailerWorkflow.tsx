@@ -19,10 +19,16 @@ import {
   Switch,
   Chip,
   Paper,
+  Alert,
+  CardMedia,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import PrivacyCoordinator from './PrivacyCoordinator';
+import DalleImageGenerator from './DalleImageGenerator';
+import { generateMarketingContent } from '../services/groqService';
+import ImageIcon from '@mui/icons-material/Image';
 
 interface MailerCampaign {
   id: string;
@@ -35,6 +41,7 @@ interface MailerCampaign {
     description?: string;
     callToAction?: string;
     specialOffers: string[];
+    imageUrl?: string;
   };
   timing: {
     designStart: Date;
@@ -61,12 +68,22 @@ const LocalMailerWorkflow: React.FC = () => {
       headline: '',
       description: '',
       callToAction: '',
-      specialOffers: []
+      specialOffers: [],
+      imageUrl: ''
     }
   });
+  const [privacyStatus, setPrivacyStatus] = useState<'compliant' | 'non_compliant' | null>(null);
 
   const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
+    if (activeStep === steps.length - 1) {
+      // Launch campaign
+      if (privacyStatus === 'compliant') {
+        // TODO: Implement actual campaign launch
+        console.log('Launching campaign:', campaign);
+      }
+    } else {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -94,6 +111,57 @@ const LocalMailerWorkflow: React.FC = () => {
         specialOffers: prev.content?.specialOffers.filter((_, i) => i !== index) || []
       }
     }));
+  };
+
+  const handleImageGenerated = (imageUrl: string) => {
+    setCampaign(prev => ({
+      ...prev,
+      content: {
+        ...prev.content!,
+        imageUrl
+      }
+    }));
+  };
+
+  const handleGenerateContent = async () => {
+    try {
+      const response = await generateMarketingContent(campaign);
+      
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      // Parse the generated content
+      const content = response.content;
+      const lines = content.split('\n');
+      let headline = '';
+      let description = '';
+      let callToAction = '';
+
+      // Simple parsing logic - can be improved based on actual response format
+      for (const line of lines) {
+        if (line.toLowerCase().includes('headline:')) {
+          headline = line.split(':')[1].trim();
+        } else if (line.toLowerCase().includes('description:')) {
+          description = line.split(':')[1].trim();
+        } else if (line.toLowerCase().includes('call to action:')) {
+          callToAction = line.split(':')[1].trim();
+        }
+      }
+
+      setCampaign(prev => ({
+        ...prev,
+        content: {
+          ...prev.content!,
+          headline,
+          description,
+          callToAction
+        }
+      }));
+    } catch (error) {
+      console.error('Error generating content:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   const renderStepContent = (step: number) => {
@@ -137,6 +205,22 @@ const LocalMailerWorkflow: React.FC = () => {
         return (
           <Grid container spacing={3}>
             <Grid item xs={12}>
+              <DalleImageGenerator
+                onImageGenerated={handleImageGenerated}
+                currentImage={campaign.content?.imageUrl}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="h6">Campaign Content</Typography>
+                <Button
+                  variant="outlined"
+                  onClick={handleGenerateContent}
+                  startIcon={<ImageIcon />}
+                >
+                  Generate Content
+                </Button>
+              </Box>
               <TextField
                 fullWidth
                 label="Headline"
@@ -254,6 +338,19 @@ const LocalMailerWorkflow: React.FC = () => {
                   <Typography variant="h6" gutterBottom>
                     Campaign Summary
                   </Typography>
+                  {campaign.content?.imageUrl && (
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Campaign Image
+                      </Typography>
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image={campaign.content.imageUrl}
+                        alt="Campaign image"
+                      />
+                    </Box>
+                  )}
                   <Typography variant="body1">
                     <strong>Name:</strong> {campaign.name}
                   </Typography>
@@ -282,6 +379,12 @@ const LocalMailerWorkflow: React.FC = () => {
                   </ul>
                 </CardContent>
               </Card>
+            </Grid>
+            <Grid item xs={12}>
+              <PrivacyCoordinator
+                campaignData={campaign}
+                onPrivacyStatusChange={setPrivacyStatus}
+              />
             </Grid>
           </Grid>
         );
@@ -319,7 +422,10 @@ const LocalMailerWorkflow: React.FC = () => {
         <Button
           variant="contained"
           onClick={handleNext}
-          disabled={activeStep === steps.length - 1}
+          disabled={
+            activeStep === steps.length - 1 && 
+            privacyStatus !== 'compliant'
+          }
         >
           {activeStep === steps.length - 1 ? 'Launch Campaign' : 'Next'}
         </Button>

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { detectAndMaskPII } from './security/privacy/pii_detector'
+import { securityMiddleware } from './security/SecurityMiddleware'
+import { environmentManager } from './config/environment'
+import { privacyManager } from './security/PrivacyManager'
 
 /**
  * Determines if a given API route should be protected with PII detection
@@ -90,14 +92,16 @@ async function processPiiInResponse(response: NextResponse): Promise<NextRespons
   return response;
 }
 
-// Recursively mask PII in an object
+/**
+ * Recursively mask PII in an object using the privacy manager
+ */
 function maskObjectPii(obj: any): any {
   if (obj === null || obj === undefined) {
     return obj;
   }
   
   if (typeof obj === 'string') {
-    return detectAndMaskPII(obj);
+    return privacyManager.maskPII(obj);
   }
   
   if (Array.isArray(obj)) {
@@ -117,31 +121,60 @@ function maskObjectPii(obj: any): any {
   return obj;
 }
 
+// Custom type for security headers
+type SecurityHeaders = {
+  'Content-Security-Policy'?: string;
+  'X-XSS-Protection'?: string;
+  'X-Frame-Options'?: string;
+  'X-Content-Type-Options'?: string;
+  'Strict-Transport-Security'?: string;
+  'Referrer-Policy'?: string;
+};
+
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const response = NextResponse.next();
   
-  // Only process protected API routes
-  if (isProtectedApiRoute(pathname)) {
-    try {
-      // Process the request to mask PII
-      const maskedRequest = await processPiiInRequest(request);
-      
-      // Get the response
-      const response = NextResponse.next({
-        request: maskedRequest,
-      });
-      
-      // Process the response to mask PII
-      return processPiiInResponse(await response);
-    } catch (error) {
-      console.error('Error in PII middleware:', error);
-      return NextResponse.next();
-    }
+  // Apply security headers
+  const securityHeaders = securityMiddleware.getSecurityHeaders();
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+
+  // Check rate limiting
+  const ip = request.ip || 'unknown';
+  if (!securityMiddleware.checkRateLimit(ip)) {
+    return new NextResponse('Too Many Requests', { status: 429 });
   }
+
+  // Validate request origin and content type
+  const origin = request.headers.get('origin');
+  const contentType = request.headers.get('content-type');
   
-  return NextResponse.next();
+  if (!securityMiddleware.validateOrigin(origin) || 
+      !securityMiddleware.validateContentType(contentType, request.method)) {
+    return new NextResponse('Forbidden', { status: 403 });
+  }
+
+  // Process PII in protected routes
+  if (isProtectedApiRoute(request.nextUrl.pathname)) {
+    const maskedRequest = await processPiiInRequest(request);
+    const initialResponse = NextResponse.next({
+      request: maskedRequest,
+    });
+    return processPiiInResponse(await initialResponse);
+  }
+
+  // Add environment-specific headers
+  if (environmentManager.isDevelopment()) {
+    response.headers.set('X-Development-Mode', 'true');
+  }
+
+  return response;
 }
 
 export const config = {
-  matcher: '/:path*',
-} 
+  matcher: [
+    '/api/:path*',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
+}; 
